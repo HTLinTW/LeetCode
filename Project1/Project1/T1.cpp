@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -42,6 +43,34 @@ public:
 		return {};
 	}
 };
+
+
+class Solution2 {
+public:
+	vector<int> twoSum(vector<int>& nums, int target)
+	{
+		set<int> myset;
+		int temp;
+
+		for (int i = 0; i < nums.size(); i++)
+		{
+			temp = target - nums[i];
+			myset.insert(nums[i]);
+			if (myset.count(temp) == 1)
+			{
+				for (int j = 0; j < i; j++)
+				{
+					if (temp == nums[j])
+					{
+						return { i,j };
+					}
+				}
+			}
+		}
+		return {};
+	}
+};
+
 
 
 int main()
