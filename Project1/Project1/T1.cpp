@@ -8,20 +8,20 @@ class Solution {
 public:
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
-		vector<int> ans;
+		//vector<int> ans;
 		int temp;
 
-		if (nums.size() < 2 && nums.size() > 10000)
-			return ans;
+		//if (nums.size() < 2 && nums.size() > 10000)
+		//	return ans;
 
-		for (int i = 0; i < nums.size(); i++)
-		{
-			if (nums[i] < -pow(10, 9) && nums[i] > pow(10, 9))
-				return ans;
-		}
+		//for (int i = 0; i < nums.size(); i++)
+		//{
+		//	if (nums[i] < -pow(10, 9) && nums[i] > pow(10, 9))
+		//		return ans;
+		//}
 
-		if (target < -pow(10, 9) && target > pow(10, 9))
-			return ans;
+		//if (target < -pow(10, 9) && target > pow(10, 9))
+		//	return ans;
 
 		for (int i = 0; i < nums.size(); i++)
 		{
@@ -30,15 +30,16 @@ public:
 			{
 				if (temp == nums[j])
 				{
-					ans.resize(2);
-					ans[0] = i;
-					ans[1] = j;
-					return ans;
+					//ans.resize(2);
+					//ans[0] = i;
+					//ans[1] = j;
+					return {i,j};
 				}
 			}
 		}
 
-		return ans;
+		//return ans;
+		return {};
 	}
 };
 
