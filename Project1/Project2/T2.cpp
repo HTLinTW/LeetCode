@@ -153,7 +153,7 @@ public:
 };
 
 
-//int main()
+int main()
 {
 	Solution S1;
 	//Solution2 S2;
