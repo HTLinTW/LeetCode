@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
@@ -75,6 +76,7 @@ public:
 //但搜尋重複值的地方像是用O(N)比較久
 //但搜尋重複值是從start開始找，而不是重頭，所以速度快上很多，N比預期的範圍小很多
 //如果是從0開始的話，完整的O(N)時間就會有差了
+//如果用unordered_map的話O(1)比map快，但還是比Solution2plus慢
 class Solution2plus {
 public:
 	int lengthOfLongestSubstring(string s) {

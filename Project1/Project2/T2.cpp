@@ -11,6 +11,8 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
  
+//遞迴時間函數接進O(N^2)，不建議
+//除非像Fibonacci numbers可以用空間換時間
 class Solution {
 public:
 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {

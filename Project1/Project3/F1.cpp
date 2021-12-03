@@ -82,7 +82,7 @@ public:
 class Solution2 {
 public:
 	int lengthOfLongestSubstring(string s) {
-		vector<int>freq(256, -1);
+		vector<int>freq(256, -1);			//宣告初始值1~256都是-1
 		int l = 0, r = 0, ans = 0;
 		while (r < s.length()) {
 			if (freq[s[r]] != -1) {
