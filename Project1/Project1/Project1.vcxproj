@@ -123,8 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="F1.cpp" />
-    <ClCompile Include="F2.cpp" />
+    <ClCompile Include="REF.cpp" />
     <ClCompile Include="T1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
