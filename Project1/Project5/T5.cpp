@@ -11,7 +11,7 @@ public:
 	string longestPalindrome(string s) {
 		int length = 1, tempHalfLength;
 		string ans = "";
-		//分成基與偶數
+		//分成奇與偶數
 		//從第二字元開始
 		//如果右邊還沒檢查的長度低於目前最大長度的一半，就可以停了
 		for (int i = 1; i < s.length() - (length + 1) / 2; i++)
