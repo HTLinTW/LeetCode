@@ -32,33 +32,9 @@ public:
 	}
 };
 
-//class Solution2 {
-//public:
-//	vector<vector<int>> threeSum(vector<int>& nums) {
-//		vector<vector<int>> ans = {};
-//		multiset<int> temp = {};
-//		for (int i = 0; i < nums.size(); i++)
-//			temp.insert(nums[i]);
-//
-//		for (std::multiset<int>::iterator i = temp.begin(); i != (temp.end() - 2); i++)
-//		{
-//			for (auto j = ++i; j != temp.end() - 1; j++)
-//			{
-//				//std::vector<int>::iterator it;
-//				auto it = temp.find( -*i - *j);
-//				if (it != temp.end())
-//				{
-//
-//
-//					ans.push_back({ *i,*j,*it });
-//				}
-//			}
-//		}
-//
-//		return ans;
-//	}
-//};
-
+//vector的FIND時間函數是N
+//整體時間接近N^3
+//因此會超過時間
 class Solution3 {
 public:
 	vector<vector<int>> threeSum(vector<int>& nums) {
@@ -67,6 +43,7 @@ public:
 		vector<vector<int>> ans = {};
 		multiset<int> settemp(nums.begin(), nums.end());
 		vector<int> temp(settemp.begin(), settemp.end());
+		//可以用std::sort(nums.begin(), nums.end());	去排列
 
 		for (int i = 0; i < temp.size() - 2; i++)
 		{
@@ -304,6 +281,8 @@ public:
 //不用排序也可以
 //所以改用unordered_map
 //加上下限
+//MAP.COUNT的時間函數是O(N)
+//整體時間函數大概是(N^3)/4還是輸REF2的N^2
 class Solution7 {
 public:
 	vector<vector<int>> threeSum(vector<int>& nums) {
@@ -376,13 +355,94 @@ public:
 };
 
 
+//改用map.find是用黑紅樹去找，時間函數是O(LogN)
+//整體應該是O((N^2*LogN)/2)
+//總時間變化有感
+//接近REF2的N^2
+class Solution7p {
+public:
+	vector<vector<int>> threeSum(vector<int>& nums) {
+		if (nums.size() < 3)
+			return {};
+		vector<vector<int>> ans = {};
+		unordered_map<int, int> mp = {}, mm = {};
+		int imax = 0, imin = 0;
+		for (int i = 0; i < nums.size(); i++)
+		{
+			if (nums[i] < 1)
+			{
+				if (mm[nums[i]] < 3)
+				{
+					mm[nums[i]] += 1;
+					imin = min(imin, nums[i]);
+				}
+			}
+			else
+			{
+				if (mp[nums[i]] < 3)
+				{
+					mp[nums[i]] += 1;
+					imax = max(imax, nums[i]);
+				}
+			}
+		}
+
+		if (mm.size() == 0)
+			return {};
+
+		for (auto i = mm.begin(); i != mm.end(); i++)
+		{
+			if (imax < -(*i).first)
+				continue;
+			auto j = i;
+			//一定要有()才能.出first
+			if ((*i).second == 1)
+				j++;
+			for (; j != mm.end(); j++)
+			{
+				if (imax < -(*i).first - (*j).first)
+					continue;
+				if (mp.find(-(*i).first - (*j).first) != mp.end())
+					ans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
+			}
+		}
+
+		//要放在這邊，不然會因為使用mm[0]而產生{0,0}的資料
+		if (mm[0] > 2)
+			ans.push_back({ 0,0,0 });
+
+		for (auto i = mp.begin(); i != mp.end(); i++)
+		{
+			if (-imin < (*i).first)
+				continue;
+			auto j = i;
+			if ((*i).second == 1)
+				j++;
+			for (; j != mp.end(); j++)
+			{
+				if (-imin < (*i).first + (*j).first)
+					continue;
+				if (mm.find(-(*i).first - (*j).first) != mm.end())
+					ans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
+			}
+		}
+		return ans;
+	}
+};
+
+
+
+
+
 //不分正負
+//答案一樣但網頁算出來錯誤，不能用
+//但速度上應該分正負比較快
 class Solution8 {
 public:
 	vector<vector<int>> threeSum(vector<int>& nums) {
 		if (nums.size() < 3)
 			return {};
-		vector<vector<int>> myans = {};
+		vector<vector<int>> ans = {};
 		unordered_map<int, int> mymap = {};
 		unordered_set<int> myset = {};
 		int imax = 0, imin = 0;
@@ -397,35 +457,34 @@ public:
 		}
 
 		if (mymap[0] > 2)
-			myans.push_back({ 0,0,0 });
+			ans.push_back({ 0,0,0 });
 		else if (mymap[0] == 0)
 			mymap.erase(0);
 
 		for (auto i = mymap.begin(); i != mymap.end(); i++)
 		{
-			if (imax < -(*i).first || -imin < (*i).first)
-				continue;
 			auto j = i;
-			//一定要有()才能.出first
-			//if ((*i).second == 1)
 			j++;
+			//一定要有()才能.出first
+			if((*i).second ==0)
+				continue;
 			for (; j != mymap.end(); j++)
 			{
 				if (imax < -(*i).first - (*j).first || -imin < (*i).first + (*j).first)
 					continue;
 				if (myset.count((*j).first) > 0)
 					continue;
+				if ((*j).second == 0)
+					continue;
 				//error
 				//auto k = std::find(j, map.end(), -(*i).first - (*j).first);
 				//if (k == map.end())
 				//	continue;
-				//加個SKIP吧
-				//一輪完之後將i的VALUE為0
 				if ((-(*i).first - (*j).first) == (*i).first || (-(*i).first - (*j).first) == (*j).first)
 				{
 					if (mymap[(-(*i).first - (*j).first)] > 1)
 					{
-						myans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
+						ans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
 						myset.insert((*j).first);
 						myset.insert(-(*i).first - (*j).first);
 					}
@@ -433,7 +492,7 @@ public:
 				}
 				if (mymap[(-(*i).first - (*j).first)] > 0)
 				{
-					myans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
+					ans.push_back({ (*i).first,(*j).first,-(*i).first - (*j).first });
 					myset.insert((*j).first);
 					myset.insert(-(*i).first - (*j).first);
 				}
@@ -441,15 +500,15 @@ public:
 			mymap[(*i).first] = 0;
 			myset.clear();
 		}
-		return myans;
+		return ans;
 	}
 };
 
 
 int main()
 {
-	Solution8 s;
-	vector<int> v = { 1,1,-2 };
+	Solution7 s;
+	vector<int> v = { 34,55,79,28,46,33,2,48,31,-3,84,71,52,-3,93,15,21,-43,57,-6,86,56,94,74,83,-14,28,-66,46,-49,62,-11,43,65,77,12,47,61,26,1,13,29,55,-82,76,26,15,-29,36,-29,10,-70,69,17,49 };
 
 	cout << endl;
 	cout << endl << s.threeSum(v)[0][0] << endl;
